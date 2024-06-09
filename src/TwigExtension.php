@@ -6,7 +6,7 @@ namespace Bolt\Redactor;
 
 use Bolt\Common\Json;
 use Bolt\Configuration\Config;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Path;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
