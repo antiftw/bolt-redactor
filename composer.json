@@ -10,11 +10,12 @@
         }
     ],
     "require": {
-        "php": ">=7.2.9"
+        "php": "^8.3",
+        "bobdenotter/yaml-migrations": "dev-symfony7 as 1.2.0"
     },
     "require-dev": {
-        "bolt/core": "^5.0",
-        "symplify/easy-coding-standard": "^7.0"
+        "bolt/core": "dev-5.2.0-rc.2",
+        "symplify/easy-coding-standard": "^12.2"
     },
     "autoload": {
         "psr-4": {
@@ -28,5 +29,61 @@
         "screenshots": [
             "screenshots/redactor.png"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/flex": true,
+            "drupol/composer-packages": true
+        }
+    },
+    "repositories": {
+        "antiftw-bolt-core": {
+            "type": "vcs",
+            "url": "git@github.com:antiftw/bolt-core.git"
+        },
+        "antiftw-bdo-yaml-migrations": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/bdo-yaml-migrations"
+        },
+        "doctrine-behaviours": {
+            "type": "vcs",
+            "url": "git@github.com:jfsenechal/DoctrineBehaviors.git"
+        },
+        "jfsenechal_doctrine_behaviors": {
+            "type": "vcs",
+            "url": "git@github.com:jfsenechal/DoctrineBehaviors.git"
+        },
+        "antiftw-yaml-migrations": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/bdo-yaml-migrations"
+        },
+        "antiftw-php-translation-symfony-bundle": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/php-translation-symfony-bundle"
+        },
+        "antiftw-php-translation-extractor": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/php-translation-extractor"
+        },
+        "antiftw-php-translation-loco-adapter": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/php-translation-loco-adapter"
+        },
+        "antiftw-bolt-reference-extension": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/bolt-reference-extension"
+        },
+        "antiftw-bdo-configuration-notices": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/bdo-configuration-notices"
+        },
+        "antiftw-bdo-weatherwidget": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/bdo-weatherwidget"
+        },
+        "antiftw-bolt-newswidget": {
+            "type": "vcs",
+            "url": "https://github.com/antiftw/bolt-newswidget"
+        }
     }
 }
