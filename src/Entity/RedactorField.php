@@ -10,17 +10,15 @@ use Bolt\Entity\FieldInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Twig\Markup;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class RedactorField extends Field implements Excerptable, FieldInterface
 {
-    public const TYPE = 'redactor';
+    public const string TYPE = 'redactor';
 
     /**
      * Override getTwigValue to render field as html
      */
-    public function getTwigValue()
+    public function getTwigValue(): bool|array|string|Markup
     {
         $value = parent::getTwigValue();
 

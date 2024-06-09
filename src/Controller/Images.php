@@ -10,7 +10,6 @@ use Bolt\Controller\CsrfTrait;
 use Bolt\Redactor\RedactorConfig;
 use Bolt\Twig\TextExtension;
 use Bolt\Utils\ThumbnailHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,39 +19,29 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Tightenco\Collect\Support\Collection;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Illuminate\Support\Collection;
 
-/**
- * @Security("is_granted('list_files:files')")
- */
+#[IsGranted('ROLE_ADMIN')]
 class Images implements AsyncZoneInterface
 {
     use CsrfTrait;
 
-    /** @var Config */
-    private $config;
+    private Request $request;
 
-    /** @var Request */
-    private $request;
-
-    /** @var ThumbnailHelper */
-    private $thumbnailHelper;
-
-    /** @var redactorConfig */
-    private $redactorConfig;
-
-    public function __construct(Config $config, CsrfTokenManagerInterface $csrfTokenManager, RequestStack $requestStack, UrlGeneratorInterface $urlGenerator, ThumbnailHelper $thumbnailHelper, RedactorConfig $redactorConfig)
-    {
-        $this->config = $config;
-        $this->csrfTokenManager = $csrfTokenManager;
+    public function __construct(
+        private readonly Config $config,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly ThumbnailHelper $thumbnailHelper,
+        private readonly RedactorConfig $redactorConfig,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        RequestStack $requestStack,
+    ){
+        $this->setCsrfTokenManager($csrfTokenManager);
         $this->request = $requestStack->getCurrentRequest();
-        $this->thumbnailHelper = $thumbnailHelper;
-        $this->redactorConfig = $redactorConfig;
     }
 
-    /**
-     * @Route("/redactor_images", name="bolt_redactor_images", methods={"GET"})
-     */
+    #[Route('/redactor_images', name: 'bolt_redactor_images', methods: ['GET'])]
     public function getImagesList(Request $request): JsonResponse
     {
         try {
@@ -65,7 +54,7 @@ class Images implements AsyncZoneInterface
         }
 
         $locationName = $this->request->query->get('location', 'files');
-        $path = $this->config->getPath($locationName, true);
+        $path = $this->config->getPath($locationName);
 
         $files = $this->getImageFilesIndex($path);
 
@@ -88,9 +77,7 @@ class Images implements AsyncZoneInterface
         return new Collection($files);
     }
 
-    /**
-     * @Route("/redactor_files", name="bolt_redactor_files", methods={"GET"})
-     */
+    #[Route('/redactor_files', name: 'bolt_redactor_files', methods: ['GET'])]
     public function getFilesList(Request $request): JsonResponse
     {
         try {
@@ -103,7 +90,7 @@ class Images implements AsyncZoneInterface
         }
 
         $locationName = $this->request->query->get('location', 'files');
-        $path = $this->config->getPath($locationName, true);
+        $path = $this->config->getPath($locationName);
 
         $files = $this->getFilesIndex($path);
 

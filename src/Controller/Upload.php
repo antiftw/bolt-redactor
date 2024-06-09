@@ -10,7 +10,6 @@ use Bolt\Controller\CsrfTrait;
 use Bolt\Redactor\RedactorConfig;
 use Bolt\Twig\TextExtension;
 use Cocur\Slugify\Slugify;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sirius\Upload\Handler;
 use Sirius\Upload\Result\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,38 +20,22 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * @Security("is_granted('upload')")
- */
+#[IsGranted('upload')]
 class Upload implements AsyncZoneInterface
 {
     use CsrfTrait;
 
-    /** @var Config */
-    private $config;
+    public function __construct(
+        protected CsrfTokenManagerInterface $csrfTokenManager,
+        readonly private Config $config,
+        readonly private TextExtension $textExtension,
+        readonly private RequestStack $requestStack,
+        readonly private RedactorConfig $redactorConfig
+    ) {}
 
-    /** @var TextExtension */
-    private $textExtension;
-
-    /** @var Request */
-    private $request;
-
-    /** @var RedactorConfig */
-    private $redactorConfig;
-
-    public function __construct(Config $config, CsrfTokenManagerInterface $csrfTokenManager, TextExtension $textExtension, RequestStack $requestStack, RedactorConfig $redactorConfig)
-    {
-        $this->config = $config;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->textExtension = $textExtension;
-        $this->request = $requestStack->getCurrentRequest();
-        $this->redactorConfig = $redactorConfig;
-    }
-
-    /**
-     * @Route("/redactor_upload", name="bolt_redactor_upload", methods={"POST"})
-     */
+    #[Route('/redactor_upload', name: 'bolt_redactor_upload', methods: ['POST'])]
     public function handleUpload(Request $request): JsonResponse
     {
         try {
