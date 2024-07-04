@@ -28,11 +28,11 @@ class Upload implements AsyncZoneInterface
     use CsrfTrait;
 
     public function __construct(
-        protected CsrfTokenManagerInterface $csrfTokenManager,
-        readonly private Config $config,
-        readonly private TextExtension $textExtension,
-        readonly private RequestStack $requestStack,
-        readonly private RedactorConfig $redactorConfig
+        protected readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly Config $config,
+        private readonly TextExtension $textExtension,
+        private readonly RequestStack $requestStack,
+        private readonly RedactorConfig $redactorConfig
     ) {}
 
     #[Route('/redactor_upload', name: 'bolt_redactor_upload', methods: ['POST'])]
