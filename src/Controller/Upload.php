@@ -26,9 +26,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class Upload implements AsyncZoneInterface
 {
     use CsrfTrait;
-
     public function __construct(
-        protected readonly CsrfTokenManagerInterface $csrfTokenManager,
+        protected CsrfTokenManagerInterface $csrfTokenManager,
         private readonly Config $config,
         private readonly TextExtension $textExtension,
         private readonly RequestStack $requestStack,
